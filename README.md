@@ -5,7 +5,7 @@ A responsive web page (phone + desktop) for practising the English reader's thea
 Gemini-TTS, so playback needs no live TTS on the device.
 
 - Pick a scene, play the whole scene, or tap any line to play just that line.
-- Speed control (0.75×–1.15×).
+- Speed control (0.75×–1.25×), relative to the baked-in `tempo` (see below).
 - **我的角色 (My role)**: lines for the chosen role (and "All") are left silent with a
   pause, so the student reads them aloud.
 
@@ -14,6 +14,7 @@ Gemini-TTS, so playback needs no live TTS on the device.
 | Path | Purpose |
 |---|---|
 | `script.json` | Single source of truth: script text, five character voices, tone prompts |
+| `takes/` | Raw Gemini-TTS takes (kept because TTS output is not reproducible) |
 | `generate.py` | Renders `script.json` to `audio/<scene>/<nn>.mp3` and writes `audio/manifest.js` |
 | `index.html` | The player page (works from `file://` or any static host) |
 
@@ -25,6 +26,7 @@ Edit `script.json`:
 - `characters.<id>.style` — natural-language description of how the character speaks.
 - `lines[].tone` — optional per-line direction, e.g. `"Shocked and worried."`
 - `chorus` — voices mixed together for "All" lines.
+- `tempo` — speed baked into the published audio with ffmpeg (1× on the page); changing it re-uses the saved takes in `takes/`, no TTS calls.
 
 Then re-run the generator; only changed lines are re-rendered.
 

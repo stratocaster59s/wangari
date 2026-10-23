@@ -2,6 +2,7 @@
   "title": "Wangari and the Little Green Tree",
   "model": "gemini-2.5-pro-tts",
   "languageCode": "en-US",
+  "tempo": 1.15,
   "globalStyle": "This is an English reader's theater for young elementary school students in Taiwan. Speak clearly and a little slowly, with natural, expressive storytelling intonation so children can follow and imitate.",
   "characters": {
     "narrator": {

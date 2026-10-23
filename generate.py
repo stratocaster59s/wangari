@@ -8,6 +8,10 @@ Auth uses `gcloud auth print-access-token`. A line is re-rendered only when its
 text / voice / style changes (tracked by hash in audio/manifest.js), unless
 --force or --only is given. Multi-speaker lines ("All", "Wangari and Friend")
 are rendered per voice and mixed with ffmpeg.
+
+Raw TTS takes are kept in takes/ (Gemini-TTS is not deterministic, so a take
+cannot be reproduced). The published audio/<scene>/<nn>.mp3 is the take with
+script.json "tempo" applied, so changing tempo needs no new TTS calls.
 """
 import argparse
 import base64
@@ -26,6 +30,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 AUDIO = ROOT / "audio"
+TAKES = ROOT / "takes"
 MANIFEST = AUDIO / "manifest.js"
 MANIFEST_PREFIX = "window.MANIFEST = "
 ENDPOINT = "https://texttospeech.googleapis.com/v1/text:synthesize"
@@ -104,6 +109,14 @@ def mix(parts, out):
     subprocess.run(cmd, check=True)
 
 
+def apply_tempo(src, out, tempo):
+    if tempo == 1:
+        out.write_bytes(src.read_bytes())
+        return
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(src),
+                    "-filter:a", f"atempo={tempo}", "-ac", "1", "-b:a", "96k", str(out)], check=True)
+
+
 def duration(path):
     out = subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration",
                                    "-of", "csv=p=0", str(path)], text=True)
@@ -130,6 +143,7 @@ def main():
 
     script = json.loads((ROOT / "script.json").read_text())
     previous = load_manifest()
+    tempo = script.get("tempo", 1)
     results, errors = {}, []
 
     def render(job):
@@ -137,31 +151,36 @@ def main():
         key = f"{sid}:{i}"
         rel = f"audio/{sid}/{i:02d}.mp3"
         out = ROOT / rel
+        take = TAKES / f"{sid}-{i:02d}.mp3"
         digest = hashlib.sha256(json.dumps([script["model"], line["text"], voices]).encode()).hexdigest()[:16]
-        prev = previous.get(key)
-        if (not args.force and key not in args.only and out.exists()
-                and prev and prev.get("hash") == digest):
+        prev = previous.get(key) or {}
+        reuse_take = (not args.force and key not in args.only and take.exists()
+                      and prev.get("hash") == digest)
+        if reuse_take and out.exists() and prev.get("tempo") == tempo:
             results[key] = prev
             return
         out.parent.mkdir(parents=True, exist_ok=True)
+        TAKES.mkdir(exist_ok=True)
         try:
-            takes = [synthesize(project, script["model"], script["languageCode"], v, p, line["text"])
-                     for v, p in voices]
-            if len(takes) == 1:
-                out.write_bytes(takes[0])
-            else:
-                with tempfile.TemporaryDirectory() as tmp:
-                    paths = []
-                    for n, data in enumerate(takes):
-                        p = Path(tmp) / f"{n}.mp3"
-                        p.write_bytes(data)
-                        paths.append(p)
-                    mix(paths, out)
+            if not reuse_take:
+                takes = [synthesize(project, script["model"], script["languageCode"], v, p, line["text"])
+                         for v, p in voices]
+                if len(takes) == 1:
+                    take.write_bytes(takes[0])
+                else:
+                    with tempfile.TemporaryDirectory() as tmp:
+                        paths = []
+                        for n, data in enumerate(takes):
+                            p = Path(tmp) / f"{n}.mp3"
+                            p.write_bytes(data)
+                            paths.append(p)
+                        mix(paths, take)
+            apply_tempo(take, out, tempo)
         except Exception as e:  # keep going; report at the end
             errors.append(f"{key}: {e}")
             return
-        results[key] = {"hash": digest, "src": rel, "dur": duration(out)}
-        print(f"  rendered {key}  {line['text'][:50]}")
+        results[key] = {"hash": digest, "tempo": tempo, "src": rel, "dur": duration(out)}
+        print(f"  {'tempo' if reuse_take else 'rendered'} {key}  {line['text'][:50]}")
 
     jobs = list(line_jobs(script))
     print(f"{len(jobs)} lines, model {script['model']}, project {project}")
@@ -180,7 +199,7 @@ def main():
                 "label": script["chorus"]["label"] if line["who"] == "all"
                 else " and ".join(chars[k]["label"] for k in who),
                 "text": line["text"],
-                "src": r.get("src"), "dur": r.get("dur"), "hash": r.get("hash"),
+                "src": r.get("src"), "dur": r.get("dur"), "hash": r.get("hash"), "tempo": r.get("tempo"),
             })
         manifest["scenes"].append({k: scene[k] for k in ("id", "title", "titleZh")} | {"lines": lines})
     manifest["roles"] = [{"id": k, "label": c["label"]} for k, c in chars.items()]

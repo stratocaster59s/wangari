@@ -69,6 +69,7 @@
   }
   .btn.secondary { background: var(--card); color: var(--ink); border: 1px solid var(--line); }
   .field { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--muted); }
+  select:disabled { opacity: .5; }
   select {
     font-size: 15px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line);
     background: var(--card); color: var(--ink); min-height: 40px;
@@ -109,14 +110,13 @@
 <div class="tabs" id="tabs" role="tablist"></div>
 <div class="bar">
   <div class="controls">
-    <button class="btn" id="playScene">▶ 播放本場景</button>
-    <button class="btn secondary" id="stop">■ 停止</button>
+    <button class="btn" id="toggle">▶ 播放本場景</button>
     <label class="field">速度
       <select id="speed">
         <option value="0.75">0.75×</option>
         <option value="0.9">0.9×</option>
         <option value="1" selected>1×</option>
-        <option value="1.15">1.15×</option>
+        <option value="1.25">1.25×</option>
       </select>
     </label>
     <label class="field">我的角色
@@ -150,11 +150,28 @@
   let sceneIdx = Math.max(0, M.scenes.findIndex(s => s.id === store.get("scene")));
   let run = 0;          // incremented to cancel any in-flight sequence
   let waitTimer = null;
-  let sceneRunning = false;
+  let playing = false;
 
   M.roles.forEach(r => $("role").add(new Option(r.label, r.id)));
   $("role").value = store.get("role") || "";
   $("speed").value = store.get("speed") || "1";
+  if (!$("speed").value) $("speed").value = "1";
+
+  // Speed only changes while stopped, so the rate is set once as the default
+  // and every clip starts at it instead of being re-rated mid-load.
+  function applySpeed() {
+    const rate = parseFloat($("speed").value);
+    audio.defaultPlaybackRate = rate;
+    audio.playbackRate = rate;
+    audio.preservesPitch = true;
+  }
+  applySpeed();
+
+  function setPlaying(on) {
+    playing = on;
+    $("speed").disabled = on;
+    $("toggle").textContent = on ? "■ 停止" : "▶ 播放本場景";
+  }
 
   const isMine = line => {
     const r = $("role").value;
@@ -209,15 +226,13 @@
     run++;
     clearTimeout(waitTimer);
     audio.pause();
-    sceneRunning = false;
     highlight(-1);
-    $("playScene").textContent = "▶ 播放本場景";
+    setPlaying(false);
   }
 
   function playSrc(src, token) {
     return new Promise(resolve => {
       audio.src = src;
-      audio.playbackRate = parseFloat($("speed").value);
       audio.onended = () => resolve(token === run);
       audio.onerror = () => resolve(token === run);
       audio.play().catch(() => resolve(false));
@@ -231,24 +246,23 @@
   async function playLine(i) {
     stop();
     const token = run;
+    setPlaying(true);
     highlight(i);
     await playSrc(M.scenes[sceneIdx].lines[i].src, token);
-    if (token === run) highlight(-1);
+    if (token === run) stop();
   }
 
   async function playScene() {
     stop();
     const token = run;
-    sceneRunning = true;
-    $("playScene").textContent = "⏸ 停止播放";
+    setPlaying(true);
     const lines = M.scenes[sceneIdx].lines;
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
       if (!line.src) continue;
       highlight(i);
-      const rate = parseFloat($("speed").value);
       const ok = isMine(line)
-        ? await wait((line.dur * 1.3 / rate + 0.8) * 1000, token)
+        ? await wait((line.dur * 1.3 / audio.defaultPlaybackRate + 0.8) * 1000, token)
         : await playSrc(line.src, token);
       if (!ok) return;
       if (!(await wait(350, token))) return;
@@ -256,9 +270,8 @@
     if (token === run) stop();
   }
 
-  $("playScene").onclick = () => (sceneRunning ? stop() : playScene());
-  $("stop").onclick = stop;
-  $("speed").onchange = () => { store.set("speed", $("speed").value); audio.playbackRate = parseFloat($("speed").value); };
+  $("toggle").onclick = () => (playing ? stop() : playScene());
+  $("speed").onchange = () => { store.set("speed", $("speed").value); applySpeed(); };
   $("role").onchange = () => { store.set("role", $("role").value); renderScene(); };
 
   renderTabs();
