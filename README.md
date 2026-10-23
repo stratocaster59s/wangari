@@ -5,7 +5,7 @@ A responsive web page (phone + desktop) for practising the English reader's thea
 Gemini-TTS, so playback needs no live TTS on the device.
 
 - Pick a scene, play the whole scene, or tap any line to play just that line.
-- Speed control (0.75×–1.25×), relative to the baked-in `tempo` (see below).
+- Speed control (0.6×–1.25×), relative to the baked-in `tempo` (see below).
 - **我的角色 (My role)**: lines for the chosen role (and "All") are left silent with a
   pause, so the student reads them aloud.
 
