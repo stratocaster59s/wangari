@@ -6,8 +6,9 @@ Gemini-TTS, so playback needs no live TTS on the device.
 
 - Pick a scene, play the whole scene, or tap any line to play just that line.
 - Speed control (0.6×–1.25×), relative to the baked-in `tempo` (see below).
-- **我的角色 (My role)**: lines for the chosen role (and "All") are left silent with a
-  pause, so the student reads them aloud.
+- Modes: **全部播放** (everything), **只聽我的角色** (only the chosen role's lines), and
+  **對戲練習** (practice: the chosen role's lines are left silent with a countdown bar,
+  so the student reads them aloud). "All" lines count as every role's lines.
 
 ## Files
 
