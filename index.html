@@ -46,13 +46,11 @@
   header p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
 
   .tabs {
-    display: flex; gap: 8px; overflow-x: auto; padding: 8px 16px; max-width: 860px; margin: 0 auto;
-    scrollbar-width: none;
+    display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 16px; max-width: 860px; margin: 0 auto;
   }
-  .tabs::-webkit-scrollbar { display: none; }
   .tab {
-    flex: 0 0 auto; border: 1px solid var(--line); background: var(--card); color: var(--ink);
-    padding: 8px 14px; border-radius: 999px; font-size: 15px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    padding: 8px 14px; border-radius: 999px; font-size: 15px; cursor: pointer; white-space: nowrap;
   }
   .tab[aria-selected="true"] { background: var(--brand); color: var(--brand-ink); border-color: var(--brand); }
 
@@ -100,6 +98,13 @@
   .meter i { display: block; height: 100%; width: 100%; background: var(--wangari); transform-origin: left; }
   .field[hidden] { display: none; }
   @media (max-width: 520px) {
+    .tabs { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .tab { padding: 8px 4px; }
+    .controls { display: grid; grid-template-columns: 64px 1fr 96px; gap: 8px; padding: 8px 16px; }
+    .field select { padding: 8px 4px; font-size: 14px; }
+    #toggle { grid-column: 1 / -1; width: 100%; }
+    .field { flex-direction: column; align-items: stretch; gap: 2px; font-size: 12px; min-width: 0; }
+    .field select { width: 100%; min-width: 0; }
     .line { grid-template-columns: 1fr; }
     .who { justify-self: start; }
     .cue { grid-column: 1; }
@@ -129,7 +134,7 @@
       <select id="mode">
         <option value="all">全部播放</option>
         <option value="listen">只聽我的角色</option>
-        <option value="practice">對戲練習（我的台詞留白）</option>
+        <option value="practice">對戲練習</option>
       </select>
     </label>
     <label class="field" id="roleField">我的角色
