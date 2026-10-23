@@ -1,0 +1,147 @@
+{
+  "title": "Wangari and the Little Green Tree",
+  "model": "gemini-2.5-pro-tts",
+  "languageCode": "en-US",
+  "globalStyle": "This is an English reader's theater for young elementary school students in Taiwan. Speak clearly and a little slowly, with natural, expressive storytelling intonation so children can follow and imitate.",
+  "characters": {
+    "narrator": {
+      "label": "Narrator",
+      "voice": "Charon",
+      "style": "You are a warm, calm storyteller reading a picture book aloud to children."
+    },
+    "wangari": {
+      "label": "Wangari",
+      "voice": "Leda",
+      "style": "You are Wangari, a bright, curious and determined young Kenyan girl who loves trees. Sound youthful, sincere and full of energy."
+    },
+    "mama": {
+      "label": "Mama",
+      "voice": "Gacrux",
+      "style": "You are Wangari's loving, gentle and wise mother. Sound warm, kind and encouraging."
+    },
+    "friend": {
+      "label": "Friend",
+      "voice": "Puck",
+      "style": "You are Wangari's friend, a lively young villager. Sound friendly and expressive, sometimes worried or doubtful, later amazed and proud."
+    },
+    "trees": {
+      "label": "Trees",
+      "voice": "Algenib",
+      "style": "You are the voice of the trees: deep, slow, magical and grand, like an ancient forest speaking with joy."
+    }
+  },
+  "chorus": {
+    "label": "All",
+    "voices": ["narrator", "wangari", "mama", "friend", "trees"],
+    "style": "You are one of a group of children shouting this line together on stage, loud, happy and energetic."
+  },
+  "scenes": [
+    {
+      "id": "s1",
+      "title": "Scene 1 — A Girl Who Loved Trees",
+      "titleZh": "場景一：喜歡樹木的女孩",
+      "lines": [
+        { "who": ["narrator"], "text": "Long ago, in Kenya, Africa, there was a little girl named Wangari." },
+        { "who": ["wangari"], "text": "I love trees!", "tone": "Joyful and excited." },
+        { "who": ["mama"], "text": "Wangari, look at the trees. They are big and strong." },
+        { "who": ["wangari"], "text": "Yes, Mama! Trees give us shade. Trees give us fruit. Trees give birds a home.", "tone": "Happy and proud, listing each thing." },
+        { "who": ["trees"], "text": "We love trees! Trees are our friends!" },
+        { "who": ["narrator"], "text": "Wangari loved nature. She loved learning, too." },
+        { "who": ["wangari"], "text": "I want to learn. I want to help people.", "tone": "Earnest and hopeful." },
+        { "who": ["mama"], "text": "Then keep learning, Wangari.", "tone": "Proud and encouraging." },
+        { "who": ["wangari"], "text": "Yes, Mama!" }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "Scene 2 — A Big Problem",
+      "titleZh": "場景二：一個大問題",
+      "lines": [
+        { "who": ["narrator"], "text": "Wangari grew up. She studied science and became a teacher. One day, she went back to the villages in Kenya." },
+        { "who": ["wangari"], "text": "Oh, no! Where are the trees?", "tone": "Shocked and worried." },
+        { "who": ["friend"], "text": "There are fewer trees now.", "tone": "Sad." },
+        { "who": ["wangari"], "text": "What happened?", "tone": "Concerned." },
+        { "who": ["friend"], "text": "People need wood for cooking. The forests are getting smaller.", "tone": "Sad and serious." },
+        { "who": ["wangari"], "text": "That is a big problem.", "tone": "Serious and thoughtful." },
+        { "who": ["friend"], "text": "The soil is dry. The water is harder to find.", "tone": "Worried." },
+        { "who": ["wangari"], "text": "Hmm... I have an idea!", "tone": "Thinking for a moment, then suddenly bright and excited." },
+        { "who": ["friend"], "text": "What idea?", "tone": "Curious." },
+        { "who": ["wangari"], "text": "Let's plant trees!", "tone": "Excited and confident." },
+        { "who": ["friend"], "text": "Trees?", "tone": "Surprised and doubtful." },
+        { "who": ["wangari"], "text": "Yes! One tree can help. Two trees can help. Many trees can help even more!", "tone": "Enthusiastic, building up energy." },
+        { "who": ["trees"], "text": "Plant a tree! Help the Earth!" }
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "Scene 3 — One Small Seed",
+      "titleZh": "場景三：一顆小小的種子",
+      "lines": [
+        { "who": ["narrator"], "text": "Wangari and many women began to plant trees." },
+        { "who": ["wangari"], "text": "Here is a little seed.", "tone": "Gentle, showing something precious." },
+        { "who": ["friend"], "text": "It is so small!", "tone": "Surprised." },
+        { "who": ["wangari"], "text": "Yes, it is small.", "tone": "Calm and smiling." },
+        { "who": ["friend"], "text": "Can one little seed really help?", "tone": "Doubtful." },
+        { "who": ["wangari"], "text": "Yes!", "tone": "Confident." },
+        { "who": ["wangari", "friend"], "text": "One small seed can grow!", "tone": "Happy and hopeful, said together." },
+        { "who": "all", "text": "Dig, dig, dig! Plant, plant, plant! Water, water, water!", "tone": "Rhythmic like a working chant." },
+        { "who": ["trees"], "text": "Grow, little tree! Grow!" },
+        { "who": ["narrator"], "text": "The women planted more and more trees. The little trees grew. The people had more trees, more shade, and more hope." },
+        { "who": "all", "text": "One tree! Two trees! Three trees!", "tone": "Counting with growing excitement." },
+        { "who": ["trees"], "text": "Many, many trees!" }
+      ]
+    },
+    {
+      "id": "s4",
+      "title": "Scene 4 — Never Give Up",
+      "titleZh": "場景四：永不放棄",
+      "lines": [
+        { "who": ["friend"], "text": "Wangari, this is hard.", "tone": "Tired and discouraged." },
+        { "who": ["wangari"], "text": "Yes, it is hard.", "tone": "Honest and calm." },
+        { "who": ["friend"], "text": "Maybe we should stop.", "tone": "Discouraged." },
+        { "who": ["wangari"], "text": "No.", "tone": "Firm but kind." },
+        { "who": ["friend"], "text": "No?", "tone": "Surprised." },
+        { "who": ["wangari"], "text": "We can start small.", "tone": "Encouraging." },
+        { "who": ["friend"], "text": "Start small?", "tone": "Curious." },
+        { "who": ["wangari"], "text": "Yes. One seed. One tree. One person.", "tone": "Slow and meaningful, with a pause after each part." },
+        { "who": ["trees"], "text": "One person can help!" },
+        { "who": ["wangari"], "text": "Then another person can help.", "tone": "Hopeful and inspiring." },
+        { "who": "all", "text": "And another! And another!" },
+        { "who": ["narrator"], "text": "More and more people joined Wangari. They planted millions of trees in Kenya." },
+        { "who": ["trees"], "text": "Green trees! Green Earth! Green hope!" }
+      ]
+    },
+    {
+      "id": "s5",
+      "title": "Scene 5 — The Nobel Peace Prize",
+      "titleZh": "場景五：諾貝爾和平獎",
+      "lines": [
+        { "who": ["narrator"], "text": "Wangari never stopped helping people and the Earth. In 2004, she received the Nobel Peace Prize. She was the first African woman to receive the prize.", "tone": "Proud and celebratory." },
+        { "who": ["friend"], "text": "Wangari, you did it!", "tone": "Amazed and overjoyed." },
+        { "who": ["wangari"], "text": "We did it together.", "tone": "Warm and humble." },
+        { "who": ["friend"], "text": "You started with one small idea.", "tone": "Admiring." },
+        { "who": ["wangari"], "text": "Yes.", "tone": "Gentle smile." },
+        { "who": ["trees"], "text": "One small seed..." },
+        { "who": "all", "text": "Can grow into a big tree!" },
+        { "who": ["wangari"], "text": "And one small action...", "tone": "Meaningful, leading in." },
+        { "who": "all", "text": "Can make a big difference!" }
+      ]
+    },
+    {
+      "id": "end",
+      "title": "Ending — Our Little Tree",
+      "titleZh": "結尾：我們的小樹",
+      "lines": [
+        { "who": ["narrator"], "text": "Wangari taught the world something very important. We do not need to be big to make a difference. We can start with one small thing.", "tone": "Warm and inspiring." },
+        { "who": ["wangari"], "text": "I can help.", "tone": "Confident." },
+        { "who": ["friend"], "text": "I can help.", "tone": "Confident." },
+        { "who": ["trees"], "text": "We can help!" },
+        { "who": ["wangari"], "text": "What can you do for the Earth?", "tone": "Asking the audience, inviting." },
+        { "who": "all", "text": "We can plant! We can care! We can help!" },
+        { "who": "all", "text": "One person can make a difference!" },
+        { "who": ["trees"], "text": "Let's grow a better world!" },
+        { "who": "all", "text": "Thank you!", "tone": "Bowing to the audience, cheerful." }
+      ]
+    }
+  ]
+}
